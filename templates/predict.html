@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+  <link rel="stylesheet" href="{{url_for('static', filename='css/bootstrap.min.css')}}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+    <title>Inputs for accurate prediction</title>
+    <script>
+      $(document).ready(function(){
+        $('result').hide();
+        $('searchInput').keyup(function(){
+          $('result').show();
+          
+        });
+      });
+    </script>
+  <style>
+    #txtHint{
+      list-style: none;
+    }
+    @keyframes coptan {
+      0%{opacity: 0;}
+      100%{opacity: 1}
+    }
+    span{
+      color: white;
+      padding-top: 20px;
+    }
+    .footer{
+    background-color: #191d21;
+    height: 48px;
+    margin-top: 5px;
+    color: white;
+}
+    #rain{
+      animation-name: coptan;
+      animation-duration: 3s;
+      animation-iteration-count: infinite;
+      animation-delay: 1s;
+    }
+    @keyframes suab {
+      0%{opacity: 0;}
+      95%{opacity: 1}
+    }
+    @keyframes hum {
+      50%{opacity: 0;}
+      95%{opacity: 1}
+    }
+    #hum{
+      animation-name: coptan;
+      animation-duration: 3s;
+      animation-iteration-count: infinite;
+      animation-delay: 2s;
+    }
+    #sun{
+      animation-name: suab;
+      animation-duration: 3s;
+      animation-iteration-count: infinite;
+      animation-delay: 3s;
+    }
+    label{
+      color: white;
+    }
+    #searchInput{
+      width: 200px;
+    }
+    .template{
+      background-color: rgba(0, 0, 0, 0.727);
+      border-radius: 5px;
+      width: 90%;
+      height: fit-content;
+      border: 2px solid white;
+      margin: 5%;
+    }
+    #baz{
+      position: absolute;
+      top: 40px;
+      right: 140px;
+      width: 200px;
+    }
+    #results{
+      margin-top: -5px;
+    }
+    body{
+      background-image: url("{{url_for('static', filename='images/bgg.jpg')}}");
+      background-color: #191d21;
+      background-position-y:top;
+      background-repeat: no-repeat;
+      background-size: cover;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+  </style>
+    <script>
+    function fetchWeatherData() {
+      var selectedRegion = document.getElementById("results").value;
+      if (selectedRegion !== "") {
+        const apiKey = 'e745de56bfaaed26a2016c12e4b28914'; // Replace with your own API key
+
+        const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(selectedRegion)}&appid=${apiKey}`;
+
+        fetch(apiUrl)
+          .then(response => response.json())
+          .then(data => {
+            // Check if the required properties exist in the API response
+            if (data && data.main && data.main.temp && data.main.humidity && data.weather && data.weather[0] && data.weather[0].description) {
+              // Extract relevant weather information
+              const location = data.name;
+              const temperature = Math.round(data.main.temp - 273.15); // Convert temperature from Kelvin to Celsius
+              const humidity = data.main.humidity;
+              const description = data.weather[0].description;
+             
+
+              // Update the HTML elements with the weather information
+              document.getElementById('location').value = location;
+              document.getElementById('temperature').value = temperature;
+              document.getElementById('humidity').value = humidity;
+            } else {
+              console.log("Invalid weather data received.");
+            }
+          })
+          .catch(error => {
+            console.log("An error occurred while fetching weather data:", error);
+          });
+      }
+    }
+  </script>
+</head>
+<body>
+<div class="top-nav">
+    <img src="{{url_for('static', filename='images/logo-01.png')}}" id="logo">
+    <h3 style="color: white">CROP YIELDS PREDICTION</h3>
+</div>
+    <br>
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+    <div class="card" style="width: 80%;">
+    <form>
+      Region: Search region in search bar below<input type="text" onkeyup="mud()" placeholder="search here....." style="color: black;" class="form-control" id="searchInput">
+    </form>
+      <select id="selectOptions" style="width: 200px;" hidden>
+        <option value="Arusha">Arusha</option>
+        <option value="Dar es Salaam">Dar es Salaam</option>
+        <option value="Dodoma">Dodoma</option>
+        <option value="Geita">Geita</option>
+        <option value="Iringa">Iringa</option>
+        <option value="Kagera">Kagera</option>
+        <option value="Katavi">Katavi</option>
+        <option value="Kigoma">Kigoma</option>
+        <option value="Kilimanjaro">Kilimanjaro</option>
+        <option value="Lindi">Lindi</option>
+        <option value="Manyara">Manyara</option>
+        <option value="Mara">Mara</option>
+        <option value="Mbeya">Mbeya</option>
+        <option value="Morogoro">Morogoro</option>
+        <option value="Mtwara">Mtwara</option>
+        <option value="Mwanza">Mwanza</option>
+        <option value="Njombe">Njombe</option>
+        <option value="Pemba North">Pemba North</option>
+        <option value="Pemba South">Pemba South</option>
+        <option value="Pwani">Pwani</option>
+        <option value="Rukwa">Rukwa</option>
+        <option value="Ruvuma">Ruvuma</option>
+        <option value="Shinyanga">Shinyanga</option>
+        <option value="Simiyu">Simiyu</option>
+        <option value="Singida">Singida</option>
+        <option value="Tabora">Tabora</option>
+        <option value="Tanga">Tanga</option>
+        <option value="Unguja Central">Unguja Central</option>
+        <option value="Unguja North">Unguja North</option>
+        <option value="Unguja South">Unguja South</option>
+      </select>
+      <select id="results"    class="form-control" style="width: 200px;"></select>
+      <script>
+        function mud() {
+          var input = document.getElementById("searchInput").value;
+          var selectOptions = document.getElementById("selectOptions").options;
+          var resultsSelect = document.getElementById("results");
+          resultsSelect.innerHTML = "";
+
+          for (var i = 0; i < selectOptions.length; i++) {
+          var option = selectOptions[i];
+          var optionValue = option.value;
+          if (optionValue.toLowerCase().includes(input.toLowerCase())) {
+          var newOption = document.createElement("option");
+          newOption.value = optionValue;
+          newOption.textContent = optionValue;
+          resultsSelect.appendChild(newOption);
+        }
+      }
+        }
+      </script>
+          <button onclick="fetchWeatherData()" class="btn btn-primary" id="baz"><i class="fas fa-cloud-showers-heavy"></i> Get Weather</button>
+        <br>
+    <form action="{{url_for('predict')}}" method="POST" style="width: 100%"> 
+      <label for="location">Location: </label>
+      <input type="text" id="location"  class="form-control bg-success">
+      <label for="region">Temperature: &deg;C</label>
+      <input type="text" id="temperature"  class="form-control bg-danger" name="temp">
+      <label for="region">Humidity: (%)</label>
+      <input type="text" id="humidity"  class="form-control" name="humidity">
+      <label for="region">Rainfall (mm)</label>
+      <input type="text" id="rainfall" class="form-control" name="rainfall">
+      <label for="region">PH level</label>
+      <input type="number" name="ph" id="phlevel" required class="form-control">
+      <label for="region">Nitrogen level (N)</label>
+      <input type="number" id="nitrogen" class="form-control" name="N">
+      <label for="region">Phosphorus level (P)</label>
+      <input type="number" id="phlevel" required class="form-control" name="P">
+      <label for="region">Pottasium (K)</label>
+      <input type="number" id="phlevel" required class="form-control" name="K">
+      <div class="form-group" style="margin-top: 10px;">
+       <button type="submit" id="predict" name="predict" class="btn btn-primary">PREDICT</button>
+      </div>
+    </form>
+</div>
+    </div>
+    <div class="col-md-4">
+      <div class="template">
+        <h4 style="color: white">Weather factors</h4>
+        <div class="row" style="padding-top: 20px; padding-bottom: 20px;">
+          <div class="col-sm-4" id="rain">
+            <i class="fas fa-cloud-rain" style="font-size: 50px; color: white;"></i><br>
+            <span>Rainfall</span>
+          </div>
+          <div class="col-sm-4" id="hum">
+            <i class="fas fa-cloud-sun" style="font-size: 50px; color: white;"></i><br>
+            <span>Humidity</span>
+          </div>
+          <div class="col-sm-4" id="sun">
+            <i class="fas fa-sun" style="font-size: 50px; color: white;"></i><br>
+            <span>Temperature</span>
+          </div>
+        </div>
+          </div>
+          <div class="template"><p style="font-size: 20px; color: white;">CROP YIELDS PREDICTION SYSTEM provide user with a comprehensive documentation on
+             how to use the API in your project so as to increase accessibility </p>
+            <p style="font-size: 20px; color: white;">You can access the documentation <a target="_blank" href="{{url_for('apidoc')}}">here</a></p>
+            </div>
+    
+    </div>
+  </div>
+</div>
+</body>
+<footer>
+  <div class="footer"><p style="padding-top: 10px;">&#169; copyright &commat; 2023</p></div>
+</footer>
+</html>

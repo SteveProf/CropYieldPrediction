@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+  <link rel="stylesheet" href="{{url_for('static', filename='css/bootstrap.min.css')}}">
+    <script>
+        function copyToClipboard() {
+            var textToCopy = document.getElementsByClassName("text-to-copy").innerText;
+            var tempInput = document.createElement("input");
+            tempInput.value = textToCopy;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+            alert("Text copied to clipboard!");
+        }
+    </script>
+    <title>API DOCUMENTATION</title>
+    <style>
+        *{
+            font-family: sans-serif;
+        }
+        body{
+            background-image: url("{{url_for('static', filename='images/bgg.jpg')}}");
+            background-position: fixed;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-attachment: fixed;
+        }
+        .container{
+            background-color: #171923;
+            padding: 40px;
+        }
+        h3, h4{
+            color: #f5f5fa;
+        }
+        #mun{
+            color: #d7d7dc;
+            font-family: sans-serif;
+            font-size: 20px;
+        }
+        span{
+            color: #eb4432;
+        }
+        .copy-container {
+            position: relative;
+            display: inline-block;
+        }
+        .ona{
+            color: #d7d7dc;
+            font-size: 20px;
+        }
+        .copy-icon {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 5px;
+            width: 30px;
+            cursor: pointer;
+        }
+
+        .copy-icon:hover {
+            opacity: 0.7;
+        }
+        .copy-container{
+            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.433);
+            border-radius: 5px;
+            padding: 20px;
+        }
+        .top-nav{
+    position: absolute;
+    top: 0px;
+    background-color: #343a40;
+    height: 75px;
+    width: 100%;
+    position: fixed;
+    z-index: 9999;
+}
+.footer{
+    background-color: #191d21;
+    height: 48px;
+    margin-top: 5px;
+    color: white;
+    text-align: center;
+}
+h3{
+color: white;
+text-align: center;
+padding-top: 10px;
+}
+#logo{
+width: 50px;
+position: absolute;
+left: 2%;
+}
+.container{
+margin-top: 70px;
+}
+    </style>
+</head>
+<body>
+    <div class="top-nav">
+        <img src="{{url_for('static', filename='images/logo-01.png')}}" id="logo">
+        <h3 style="color: white">CROP YIELDS PREDICTION</h3>
+    </div>
+<div  class="container">
+    <h3><span>#</span> API DOCUMENTATION</h3>
+    <p>
+       <h4>Sending Crop prediction parameters</h4><span id="mun">
+        This documentation provides an overview of how to use the given PHP code to send agricultural data to an API endpoint. 
+        <br>The code utilizes the cURL library to make a POST request with the specified data.
+        <br>
+        <span>#</span> Prerequisites <br>
+        To use this code, ensure that you have the following:
+        <ul>
+            <li>A web server running PHP.</li>
+            <li>The cURL extension enabled in PHP</li>
+        </ul>
+       </span>
+       <h4> <span>#</span> Usage</h4>
+       <P class="ona">Set the API URL</P>
+       <div class="copy-container">
+        <div class="text-to-copy " contenteditable="false"><span class="text-danger">$url = "</span><span class="text-success"> replace with API url</span><span class="text-danger">";</span></div>
+       
+        <img  src="{{url_for('static', filename='images/bullet-01.png')}}" class="copy-icon" alt="Copy Icon" onclick="copyToClipboard()">
+    </div>
+    <br>
+    <p class="ona">Replace "replace with API url" with the actual URL of the API endpoint you want to send the data to.</p>
+    <h4> <span>#</span> Retrieve input data:</h4>
+    <p class="ona">The code expects the following data to be provided via a POST request:</p>
+    </p>
+    <div class="copy-container">
+        <div class="text-to-copy " contenteditable="false"><span class="text-danger">
+        $temp = $_POST['temperature'];<br>
+        $rainfall = $_POST['rainfall'];<br>
+        $humidity = $_POST['humidity'];<br>
+        $ph = $_POST['ph'];<br>
+        $N = $_POST['N'];<br>
+        $P = $_POST['P'];<br>
+        $K = $_POST['K'];<br>
+        </span></div>
+
+    </div>
+    <p class="ona">
+        Ensure that the form or request sending the data includes the appropriate input fields with the corresponding names (temperature, rainfall, humidity, ph, N, P, K)
+    </p>
+    <h4><span>#</span> Prepare the data for the request:</h4>
+    <div class="copy-container">
+        <div class="text-to-copy " contenteditable="false"><span class="text-danger">
+            $array_data = array(<br>
+                'temperature' => $temp,<br>
+                'humidity' => $humidity,<br>
+                'ph' => $ph,<br>
+                'rainfall' => $rainfall, <br>
+                'N' => $N,<br>
+                'P' => $P,<br>
+                'K' => $K <br>
+            );<br>
+            $data = http_build_query($array_data);
+        </span></div>
+        <img  src="{{url_for('static', filename='images/bullet-01.png')}}" class="copy-icon" alt="Copy Icon" onclick="copyToClipboard()">
+    </div>
+    <p class="ona">
+        The code creates an associative array array_data with the input data. Ensure that the array keys match the expected field names in the API. The http_build_query function is used to encode the data as a URL-encoded string.
+    </p>
+    <h4><span>#</span> Make the API request:</h4>
+    <div class="copy-container">
+        <div class="text-to-copy " contenteditable="false"><span class="text-danger">
+            $ch = curl_init();<br>
+            curl_setopt($ch, CURLOPT_URL, $url);<br>
+            curl_setopt($ch, CURLOPT_POST, true);<br>
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);<br>
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);<br>
+            $results = curl_exec($ch);
+        </span></div>
+        <img  src="{{url_for('static', filename='images/bullet-01.png')}}" class="copy-icon" alt="Copy Icon" onclick="copyToClipboard()">
+    </div>
+    <p class="ona">
+        The code initializes a cURL handle ($ch) and sets the necessary options for the request. It sets the request URL (CURLOPT_URL) to the provided API URL, enables POST request (CURLOPT_POST), sets the data to be sent (CURLOPT_POSTFIELDS), and configures cURL to return the response instead of outputting it directly (CURLOPT_RETURNTRANSFER)
+    </p>
+    <h4><span>#</span> Handle the response:</h4>
+    <div class="copy-container">
+        <div class="text-to-copy " contenteditable="false"><span class="text-danger">
+            if ($error = curl_error($ch)) {<br>
+                echo $error;<br>
+            } else {<br>
+                echo($results);<br>
+            }
+        </span></div>
+        <img  src="{{url_for('static', filename='images/bullet-01.png')}}" class="copy-icon" alt="Copy Icon" onclick="copyToClipboard()">
+    </div>
+    <p class="ona">
+    The code checks if any error occurred during the API request using curl_error. If there was an error, it will be echoed. Otherwise, the response received from the API will be echoed.
+    </p>
+    <p class="ona">RETURNED RESULTS:</p>
+    <hr style="color: white;">
+    <p class="ona">The returned results will return the response { specific crop} that will be suited and relatively to have great yields based on the prediction factors
+    <p class="ona">NOTE:</p>
+    <hr style="color: white;">
+    <p class="ona">
+    To use this code, create an HTML form or a script that sends a POST request to the PHP file containing the provided code. Ensure that the form or script includes the necessary input fields (temperature, rainfall, humidity, ph, N, P, K), and set the form's action attribute to the PHP file containing the code.
+    Upon submitting the form or making the request, the provided agricultural data will be sent to the specified API endpoint, and the response from the API will be displayed.
+    </p>
+</div>  
+</body>
+<footer>
+    <div class="footer"><p style="padding-top: 10px;">&#169; copyright &commat; 2023 crop yield prediction</p></div>
+  </footer>
+</html>
